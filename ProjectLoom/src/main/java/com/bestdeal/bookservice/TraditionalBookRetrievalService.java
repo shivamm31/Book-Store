@@ -58,13 +58,12 @@ public class TraditionalBookRetrievalService {
                 throw new RuntimeException(e);
             }
 
-            // Filter the book with the specified bookName
             Optional<Book> bookOptional = books.stream()
                     .filter(book -> book.bookName().equals(bookName))
                     .findFirst();
 
             long end = System.currentTimeMillis();
-            restCallStatistics.addTiming(storeName, end - start); // Collect timing data
+            restCallStatistics.addTiming(storeName, end - start);
 
             return bookOptional.orElse(null);
         }

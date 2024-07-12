@@ -1,7 +1,6 @@
 package com.bestdeal.bookservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,7 +57,7 @@ public class BestDealBookController {
         long start = System.currentTimeMillis();
         try {
             List<Book> books = traditionalBookRetrievalService.getBookFromAllStores(name);
-            // Use reflection to access private field 'cost'
+
             Book bestPriceBook = books.stream()
                     .min(Comparator.comparing(Book::cost))
                     .orElseThrow();

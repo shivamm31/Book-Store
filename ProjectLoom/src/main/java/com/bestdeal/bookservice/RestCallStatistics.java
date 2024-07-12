@@ -8,8 +8,6 @@ import java.util.Map;
 
 @Component
 public class RestCallStatistics {
-
-    // to map time with store name that how much time each
     private final Map<String, Long> timeMap = Collections.synchronizedMap(new HashMap<String, Long>());
 
     void addTiming(String storeName, long time) {

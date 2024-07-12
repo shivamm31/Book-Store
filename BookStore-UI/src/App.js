@@ -3,13 +3,12 @@ import Header from './components/Header';
 import BookStore from './components/BookStore';
 import Footer from './components/Footer';
 import axios from 'axios';
-
-import './index.css'; // Import the CSS file for styling
+import './index.css'; 
 
 const App = () => {
   const [bookStores, setBookStores] = useState([]);
   const [selectedBook, setSelectedBook] = useState('');
-  const [selectedType, setSelectedType] = useState(''); // Initialize with empty string
+  const [selectedType, setSelectedType] = useState(''); 
   const [bestDeal, setBestDeal] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -48,30 +47,28 @@ const App = () => {
 
   const handleBookChange = (event) => {
     setSelectedBook(event.target.value);
-    setErrorMessage(''); // Clear error message when a book is selected
+    setErrorMessage(''); 
   };
 
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
-    setErrorMessage(''); // Clear error message when a type is selected
+    setErrorMessage(''); 
   };
 
   const findBestDeal = async () => {
     try {
-      if (!selectedBook || !selectedType) { // Check if book and type are selected
+      if (!selectedBook || !selectedType) {
         setErrorMessage('Please select a book and a model');
         return;
       }
   
       const response = await axios.get(`http://localhost:8086/virtualstore/book?name=${encodeURIComponent(selectedBook)}&model=${selectedType}`);
   
-      // Extract timeStatistics, bestPriceDeal, and allDeals from the response
       const { timeStatistics, bestPriceDeal, allDeals } = response.data;
   
-      // Set the best deal including time statistics
       setBestDeal({ timeStatistics, bestPriceDeal, allDeals });
   
-      setErrorMessage(''); // Clear error message on successful fetch
+      setErrorMessage(''); 
     } catch (error) {
       if (error.response) {
         console.error('Error response from server:', error.response.data);
@@ -129,7 +126,6 @@ const App = () => {
               <p>Price: INR {deal.cost}</p>
             </div>
           ))}
-          {/* Display time statistics */}
           {bestDeal.timeStatistics && (
             <div>
               <h3>Time Statistics</h3>

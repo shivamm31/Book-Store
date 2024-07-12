@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,18 +32,14 @@ public class BookRetrievalService {
         ThreadFactory factory = Thread.ofVirtual().name("book-store-thr", 0).factory();
         try (var scope = new StructuredTaskScope<Book>("virtualstore", factory)) {
             List<Subtask<Book>> bookTasks = new ArrayList<>();
-            //forking for each store url to get book details and each task is handled by VT
             storeUrlMap.forEach((name, url) -> {
                 bookTasks.add(scope.fork(() -> getBookFromStore(name, url, bookName)));
             });
-            //waiting for task to compelte
             scope.join();
-            //logging any error messages for failed task
             bookTasks.stream()
                     .filter(t -> t.state() == State.FAILED)
                     .map(Subtask::exception)
                     .forEach(e -> e.printStackTrace());
-            //collecting all succesfull results in form of list
             return bookTasks.stream()
                     .filter(t -> t.state() == State.SUCCESS)
                     .map(Subtask::get)
@@ -65,7 +60,6 @@ public class BookRetrievalService {
             throw new RuntimeException(e);
         }
 
-        // Filter the book with the specified bookName
         Optional<Book> bookOptional = books.stream()
                 .filter(book -> book.bookName().equals(bookName))
                 .findFirst();

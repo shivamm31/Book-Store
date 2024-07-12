@@ -1,9 +1,9 @@
 -------------------------------------------------------------------------------
-Test set: com.bestdeal.bookservice.demo.DemoApplicationTests
+Test set: com.bestdeal.bookservice.DemoApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 2.481 s <<< FAILURE! -- in com.bestdeal.bookservice.demo.DemoApplicationTests
-com.bestdeal.bookservice.demo.DemoApplicationTests.contextLoads -- Time elapsed: 0.020 s <<< ERROR!
-java.lang.IllegalStateException: Failed to load ApplicationContext for [WebMergedContextConfiguration@618ad2aa testClass = com.bestdeal.bookservice.demo.DemoApplicationTests, locations = [], classes = [com.bestdeal.bookservice.demo.DemoApplication], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = ["org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true"], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@55a147cc, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@4145bad8, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@1530c739, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@cb0755b, org.springframework.boot.test.context.SpringBootTestAnnotation@17e89f2f], resourceBasePath = "src/main/webapp", contextLoader = org.springframework.boot.test.context.SpringBootContextLoader, parent = null]
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 2.723 s <<< FAILURE! -- in com.bestdeal.bookservice.DemoApplicationTests
+com.bestdeal.bookservice.DemoApplicationTests.contextLoads -- Time elapsed: 0.023 s <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext for [WebMergedContextConfiguration@238bfd6c testClass = com.bestdeal.bookservice.DemoApplicationTests, locations = [], classes = [com.bestdeal.bookservice.DemoApplication], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = ["org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true"], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@55a147cc, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@4145bad8, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@1530c739, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@cb0755b, org.springframework.boot.test.context.SpringBootTestAnnotation@17e89f2f], resourceBasePath = "src/main/webapp", contextLoader = org.springframework.boot.test.context.SpringBootContextLoader, parent = null]
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:180)
 	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
 	at org.springframework.test.context.web.ServletTestExecutionListener.setUpRequestContextIfNecessary(ServletTestExecutionListener.java:191)
@@ -22,7 +22,7 @@ java.lang.IllegalStateException: Failed to load ApplicationContext for [WebMerge
 	at java.base/java.util.Optional.orElseGet(Optional.java:364)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-Caused by: java.lang.IllegalArgumentException: Unresolvable class definition for class [com.bestdeal.bookservice.demo.BestDealBookController]
+Caused by: java.lang.IllegalArgumentException: Unresolvable class definition for class [com.bestdeal.bookservice.BestDealBookController]
 	at org.springframework.util.ClassUtils.resolveClassName(ClassUtils.java:352)
 	at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.getConfigurationClasses(MockitoPostProcessor.java:148)
 	at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:135)
@@ -44,7 +44,7 @@ Caused by: java.lang.IllegalArgumentException: Unresolvable class definition for
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:225)
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:152)
 	... 17 more
-Caused by: java.lang.UnsupportedClassVersionError: Preview features are not enabled for com/bestdeal/bookservice/demo/BestDealBookController (class file version 65.65535). Try running with '--enable-preview'
+Caused by: java.lang.UnsupportedClassVersionError: Preview features are not enabled for com/bestdeal/bookservice/BestDealBookController (class file version 65.65535). Try running with '--enable-preview'
 	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
 	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1027)
 	at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:150)
