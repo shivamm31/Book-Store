@@ -1,3 +1,5 @@
+/* index.css */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -67,20 +69,52 @@ header {
   align-items: center;
   gap: 10px;
   margin: 20px;
+  flex-direction: row; /* Align items horizontally */
+}
+
+.search-input {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin-right: 10px; /* Adjusted margin-right to create horizontal gap */
 }
 
 .book-dropdown {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 8px;
+  border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
+  width: 100%;
+  font-size: 14px;
 }
 
-.type-dropdown {
-  padding: 10px;
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.book-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background-color: white;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f2f2f2;
 }
 
 .best-deal-button {
@@ -91,6 +125,7 @@ header {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-left: 10px; /* Adjusted margin-left to create horizontal gap */
 }
 
 .best-deal-button:disabled {
@@ -113,45 +148,44 @@ footer {
   font-size: 14px;
 }
 
-.popup-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  z-index: 1000;
-  width: 80%;
-  max-width: 500px;
-}
-
-.popup-container h2 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-}
-
-.popup-container p {
-  margin: 5px 0;
-}
-
-.popup-container h3 {
-  margin-top: 15px;
-}
-
-.popup-container ul {
-  list-style: none;
-  padding: 0;
-}
-
-.popup-container li {
-  margin-bottom: 5px;
-}
-
 .error-message {
   color: red;
   margin-top: 10px;
   text-align: center;
+}
+
+.best-deal-table {
+  margin: 20px auto;
+  max-width: 800px;
+  margin-bottom: 80px; /* Added margin-bottom to create space above the footer */
+}
+
+.best-deal-table h2 {
+  font-size: 1.5em;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.best-deal-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.best-deal-table th, .best-deal-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.best-deal-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.best-deal-table tbody tr:hover {
+  background-color: #f2f2f2;
 }

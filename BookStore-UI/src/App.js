@@ -3,15 +3,16 @@ import Header from './components/Header';
 import BookStore from './components/BookStore';
 import Footer from './components/Footer';
 import axios from 'axios';
-import './index.css'; 
+import './index.css';
+import { FaSearch } from 'react-icons/fa'; // Import the search icon
 
 const App = () => {
   const [bookStores, setBookStores] = useState([]);
-  const [selectedBook, setSelectedBook] = useState('');
-  const [selectedType, setSelectedType] = useState(''); 
   const [bestDeal, setBestDeal] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  
   useEffect(() => {
     fetchBookStores();
   }, []);
@@ -19,10 +20,10 @@ const App = () => {
   const fetchBookStores = async () => {
     try {
       const responses = await Promise.all([
-        axios.get('https://7cf6495c-0e1d-45a7-9c82-1387408c7f3b.mock.pstmn.io/store/book'),
-        axios.get('https://e5646159-afea-46da-a5a7-ff5759f70858.mock.pstmn.io/store/book'),
-        axios.get('https://d94374a3-e1b3-464d-b609-ed7e45a732fa.mock.pstmn.io/store/book'),
-        axios.get('https://6410a146-4160-4128-9806-b7f5329077b5.mock.pstmn.io/store/book')
+        axios.get('https://mock-libra-api.onrender.com/Libra'),
+        axios.get('https://mock-bookworm-api.onrender.com/BookWorm'),
+        axios.get('https://mock-paperback-api.onrender.com/Paperback'),
+        axios.get('https://mock-bibliophile-api.onrender.com/Bibliophile')
       ]);
 
       const allBooks = responses.flatMap(response => response.data);
@@ -45,30 +46,45 @@ const App = () => {
     return Object.keys(grouped).map(storeName => ({ name: storeName, books: grouped[storeName] }));
   };
 
-  const handleBookChange = (event) => {
-    setSelectedBook(event.target.value);
-    setErrorMessage(''); 
+  const handleSearchInputChange = (event) => {
+    const inputValue = event.target.value;
+    setSearchInput(inputValue);
+
+    const filteredBooks = bookStores.flatMap(store => store.books)
+      .filter((book, index, self) => (
+        index === self.findIndex(b => (
+          b.bookName === book.bookName && b.author === book.author
+        ))
+      ))
+      .filter(book => {
+        const searchTerm = inputValue.trim().toLowerCase();
+        return book.bookName.toLowerCase().includes(searchTerm);
+      });
+
+    setFilteredBooks(filteredBooks);
   };
 
-  const handleTypeChange = (event) => {
-    setSelectedType(event.target.value);
-    setErrorMessage(''); 
+  const handleSuggestionClick = (suggestion) => {
+    setSearchInput(suggestion);
+    setFilteredBooks([]);
   };
 
   const findBestDeal = async () => {
     try {
-      if (!selectedBook || !selectedType) {
-        setErrorMessage('Please select a book and a model');
+      if (!searchInput.trim()) {
+        setErrorMessage('Please enter a book name to search');
         return;
       }
-  
-      const response = await axios.get(`http://localhost:8086/virtualstore/book?name=${encodeURIComponent(selectedBook)}&model=${selectedType}`);
-  
+
+      const bookName = searchInput.split(' by ')[0].trim();
+
+      const response = await axios.get(`http://localhost:8086/bestdeal/book?name=${encodeURIComponent(bookName)}`);
+
       const { timeStatistics, bestPriceDeal, allDeals } = response.data;
-  
+
       setBestDeal({ timeStatistics, bestPriceDeal, allDeals });
-  
-      setErrorMessage(''); 
+
+      setErrorMessage('');
     } catch (error) {
       if (error.response) {
         console.error('Error response from server:', error.response.data);
@@ -81,28 +97,41 @@ const App = () => {
         setErrorMessage('Error setting up request');
       }
     }
-  };  
+  };
 
   return (
     <div>
       <Header />
       <div className="book-stores">
-        {bookStores.map((store, index) => (
+        {bookStores.slice(0, 3).map((store, index) => (
           <BookStore key={index} name={store.name} books={store.books} />
         ))}
       </div>
+      <div className="book-stores">
+        {bookStores.slice(3).map((store, index) => (
+          <BookStore key={index + 3} name={store.name} books={store.books} />
+        ))}
+      </div>
       <div className="book-selection">
-        <select value={selectedBook} onChange={handleBookChange} className="book-dropdown">
-          <option value="">Select a book...</option>
-          {bookStores.flatMap(store => store.books).map((book, index) => (
-            <option key={index} value={book.bookName}>{book.bookName} by {book.author}</option>
-          ))}
-        </select>
-        <select value={selectedType} onChange={handleTypeChange} className="type-dropdown">
-          <option value="">Select a model...</option>
-          <option value="virtual">Virtual</option>
-          <option value="traditional">Traditional</option>
-        </select>
+        <div className="search-input">
+          <input
+            type="text"
+            value={searchInput}
+            onChange={handleSearchInputChange}
+            placeholder="Search for a book..."
+            className="book-dropdown"
+          />
+          <FaSearch className="search-icon" />
+          {searchInput.length > 0 && filteredBooks.length > 0 && (
+            <div className="book-suggestions">
+              {filteredBooks.map((book, index) => (
+                <div key={`${book.bookName}-${book.author}`} className="suggestion-item" onClick={() => handleSuggestionClick(`${book.bookName} by ${book.author}`)}>
+                  {book.bookName} by {book.author}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <button onClick={findBestDeal} className="best-deal-button">Best Deal Price</button>
       </div>
       {errorMessage && (
@@ -111,31 +140,47 @@ const App = () => {
         </div>
       )}
       {bestDeal && (
-        <div className="popup-container">
+        <div className="best-deal-table">
           <h2>Best Deal</h2>
-          <p>Book Name: {bestDeal.bestPriceDeal.bookName}</p>
-          <p>Author: {bestDeal.bestPriceDeal.author}</p>
-          <p>Store: {bestDeal.bestPriceDeal.bookStore}</p>
-          <p>Price: INR {bestDeal.bestPriceDeal.cost}</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Store</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{bestDeal.bestPriceDeal.bookName}</td>
+                <td>{bestDeal.bestPriceDeal.author}</td>
+                <td>{bestDeal.bestPriceDeal.bookStore}</td>
+                <td>INR {bestDeal.bestPriceDeal.cost}</td>
+              </tr>
+            </tbody>
+          </table>
           <h3>All Deals</h3>
-          {bestDeal.allDeals.map((deal, index) => (
-            <div key={index}>
-              <p>Store: {deal.bookStore}</p>
-              <p>Book Name: {deal.bookName}</p>
-              <p>Author: {deal.author}</p>
-              <p>Price: INR {deal.cost}</p>
-            </div>
-          ))}
-          {bestDeal.timeStatistics && (
-            <div>
-              <h3>Time Statistics</h3>
-              <ul>
-                {Object.entries(bestDeal.timeStatistics.timeMap).map(([store, time]) => (
-                  <li key={store}>{store}: {time}ms</li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <table>
+            <thead>
+              <tr>
+                <th>Store</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bestDeal.allDeals.map((deal, index) => (
+                <tr key={index}>
+                  <td>{deal.bookStore}</td>
+                  <td>{deal.bookName}</td>
+                  <td>{deal.author}</td>
+                  <td>INR {deal.cost}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
       <Footer />
