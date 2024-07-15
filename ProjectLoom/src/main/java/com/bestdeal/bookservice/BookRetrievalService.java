@@ -18,12 +18,9 @@ import java.util.concurrent.ThreadFactory;
 
 @Service
 public class BookRetrievalService {
+
     @Value("#{${book.store.baseUrls}}")
     private Map<String, String> storeUrlMap;
-
-    @Value("${threading.model}")
-    private String threadingModel;
-
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -52,7 +49,7 @@ public class BookRetrievalService {
         List<Book> books;
 
         try {
-            String response = restTemplate.getForObject(url + "/store/book", String.class);
+            String response = restTemplate.getForObject(url, String.class);
             books = objectMapper.readValue(response, new TypeReference<List<Book>>() {});
         } catch (JsonMappingException e) {
             throw new RuntimeException(e);
